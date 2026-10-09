@@ -1,0 +1,120 @@
+/* Asistente de alta de cliente (US-2). */
+
+.alta { display: grid; grid-template-columns: 260px 1fr; gap: 20px; align-items: start; }
+
+.alta__pasos { list-style: none; margin: 0; padding: 0; position: sticky; top: calc(var(--alto-topbar) + 20px); display: flex; flex-direction: column; gap: 4px; }
+.alta__paso button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: var(--radio-sm);
+  background: none;
+  color: var(--azul-400);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-align: left;
+  cursor: default;
+}
+.alta__paso.hecho button { color: var(--azul-800); cursor: pointer; }
+.alta__paso.hecho button:hover { background: var(--azul-200); }
+.alta__paso.actual button { background: var(--blanco); color: var(--azul-900); font-weight: 800; box-shadow: var(--sombra-suave); }
+.alta__numero {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--azul-300);
+  font-size: 12px;
+  font-weight: 800;
+}
+.alta__paso.hecho .alta__numero { background: var(--salud-verde); border-color: var(--salud-verde); color: var(--blanco); }
+.alta__paso.actual .alta__numero { background: var(--grad-primario); border-color: transparent; color: var(--blanco); }
+
+.alta__cuerpo { padding: 24px 28px; }
+.alta__rejilla { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; }
+.alta__campo { display: flex; flex-direction: column; gap: 6px; font-size: var(--fs-sm); font-weight: 700; color: var(--azul-800); }
+.alta__campo input[type='range'] { accent-color: var(--azul-600); }
+.alta__error { color: var(--salud-rojo); font-weight: 600; }
+
+.alta__acciones { display: flex; align-items: center; gap: 10px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--azul-200); }
+
+.alta__brief { padding: 16px; border: 1px solid var(--azul-200); border-radius: var(--radio); background: var(--azul-50); }
+
+.alta__opcion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  flex: 1;
+  padding: 14px 16px;
+  border: 1px solid var(--azul-300);
+  border-radius: var(--radio);
+  background: var(--blanco);
+  color: var(--azul-900);
+  font-size: var(--fs-sm);
+  text-align: left;
+  cursor: pointer;
+}
+.alta__opcion:hover { border-color: var(--azul-600); }
+.alta__opcion.activa { border-color: var(--azul-600); box-shadow: 0 0 0 3px rgba(10, 85, 204, 0.15); }
+
+.alta__servicio { position: relative; padding-left: 64px; min-height: 72px; justify-content: center; }
+.alta__interruptor {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  width: 36px;
+  height: 20px;
+  margin-top: -10px;
+  border-radius: var(--radio-pill);
+  background: var(--azul-300);
+  transition: background 0.15s;
+}
+.alta__interruptor::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--blanco);
+  transition: transform 0.15s;
+}
+.alta__servicio.activa .alta__interruptor { background: var(--verde-cta); }
+.alta__servicio.activa .alta__interruptor::after { transform: translateX(16px); }
+
+.alta__acceso { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--azul-200); font-size: var(--fs-sm); }
+.alta__acceso:last-child { border-bottom: none; }
+.alta__segmentado { display: inline-flex; padding: 3px; border-radius: var(--radio-pill); background: var(--azul-50); border: 1px solid var(--azul-200); }
+.alta__segmentado button {
+  padding: 5px 12px;
+  border: none;
+  border-radius: var(--radio-pill);
+  background: none;
+  color: var(--azul-800);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  cursor: pointer;
+}
+.alta__segmentado button.activo { background: var(--blanco); color: var(--azul-900); box-shadow: var(--sombra-suave); }
+
+.alta__subida {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px;
+  border: 2px dashed var(--azul-300);
+  border-radius: var(--radio);
+  background: var(--azul-50);
+  text-align: center;
+  cursor: pointer;
+}
+.alta__subida:hover { border-color: var(--azul-600); }
+.alta__archivo { padding: 8px 12px; border: 1px solid var(--azul-200); border-radius: var(--radio-sm); background: var(--blanco); font-size: var(--fs-sm); }

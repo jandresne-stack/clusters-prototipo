@@ -1,0 +1,14 @@
+# Dependencias y builds
+node_modules/
+dist/
+
+# Documentos de clientes reales (confidenciales, no se comparten)
+docs/metodoligia/
+
+# Configuración local de Claude Code
+.claude/settings.local.json
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log

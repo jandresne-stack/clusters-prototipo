@@ -1,0 +1,104 @@
+/* ---------- Bandeja de aprobaciones (US-5) y detalle de ítem (US-4, US-16) ---------- */
+
+.tabla--aprobaciones th,
+.tabla--aprobaciones td { padding-inline: 8px; }
+.tabla--aprobaciones th:first-child,
+.tabla--aprobaciones td:first-child { padding-left: 20px; }
+.tabla--aprobaciones th:last-child,
+.tabla--aprobaciones td:last-child { padding-right: 16px; }
+.tabla--aprobaciones td { vertical-align: top; }
+.tabla--aprobaciones td:first-child { min-width: 230px; }
+.tabla--aprobaciones td:nth-child(4),
+.tabla--aprobaciones td:nth-child(5) { white-space: nowrap; }
+
+/* Artefactos con muchas columnas (KW Research tiene 10): letra más compacta */
+.tabla--artefacto { font-size: var(--fs-xs); }
+.tabla--artefacto td { padding: 10px; }
+.fila-aprobacion { cursor: pointer; }
+.fila-aprobacion__titulo { font-weight: 700; color: var(--azul-900); }
+.fila-aprobacion__meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.fila-aprobacion td:last-child { white-space: nowrap; }
+
+.antiguedad { font-weight: 700; color: var(--azul-800); }
+.antiguedad--atrasada { color: var(--salud-rojo); }
+
+/* Detalle: contenido a la izquierda, ficha y acciones a la derecha */
+.detalle { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; }
+.detalle__lateral { position: sticky; top: calc(var(--alto-topbar) + 20px); display: flex; flex-direction: column; gap: 16px; }
+
+.ficha { display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; font-size: var(--fs-sm); }
+.ficha dt { color: var(--azul-400); font-weight: 600; }
+.ficha dd { margin: 0; color: var(--azul-900); font-weight: 600; }
+
+/* Chips largos dentro de la ficha lateral (ej. "Aprobado por el cliente · WhatsApp · fecha") */
+.chip-envolver .chip { white-space: normal; text-align: left; line-height: 1.3; padding-block: 5px; }
+
+.acciones { display: flex; flex-direction: column; gap: 8px; }
+.acciones .boton { width: 100%; }
+
+.formulario { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.formulario label { display: flex; flex-direction: column; gap: 4px; font-size: var(--fs-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--azul-400); }
+.formulario textarea,
+.formulario input,
+.formulario select {
+  padding: 10px 12px;
+  border: 1px solid var(--azul-300);
+  border-radius: var(--radio-sm);
+  background: var(--blanco);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  color: var(--azul-950);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.formulario textarea { min-height: 88px; resize: vertical; }
+.formulario textarea:focus,
+.formulario input:focus,
+.formulario select:focus { outline: 2px solid var(--azul-600); outline-offset: 1px; }
+
+/* Conmutador de vista de la bandeja: pendientes vs. esperan visto bueno del cliente */
+.conmutador { display: inline-flex; padding: 3px; border-radius: var(--radio-pill); background: var(--azul-200); margin-bottom: 16px; }
+.conmutador button { border: none; background: transparent; padding: 7px 14px; border-radius: var(--radio-pill); font-family: inherit; font-size: var(--fs-sm); font-weight: 700; color: var(--azul-800); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.conmutador button.activo { background: var(--blanco); color: var(--azul-900); box-shadow: var(--sombra-suave); }
+.conmutador__contador { min-width: 20px; padding: 0 6px; border-radius: var(--radio-pill); background: var(--azul-900); color: var(--blanco); font-size: 11px; text-align: center; }
+.formulario__botones { display: flex; gap: 8px; }
+
+.por-que { font-size: var(--fs-card); line-height: 1.55; color: var(--azul-800); }
+
+/* Historial del ítem */
+.historial { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.historial li { display: grid; grid-template-columns: 10px 1fr; gap: 10px; font-size: var(--fs-sm); }
+.historial li::before { content: ''; width: 10px; height: 10px; margin-top: 5px; border-radius: 50%; background: var(--azul-300); }
+.historial li.agente::before { background: var(--naranja); }
+.historial__meta { color: var(--azul-400); font-size: var(--fs-xs); }
+
+/* Tareas del plan mensual */
+.lista-tareas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.lista-tareas li { display: grid; grid-template-columns: 90px 1fr auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--azul-200); font-size: var(--fs-sm); }
+.lista-tareas li:last-child { border-bottom: none; }
+.lista-tareas__titulo { font-weight: 700; color: var(--azul-900); }
+
+.pasos { margin: 8px 0 0; padding-left: 20px; font-size: var(--fs-sm); color: var(--azul-800); display: flex; flex-direction: column; gap: 4px; }
+
+/* Vista previa de lo que se ejecutará en GHL (US-16) */
+.ghl-previa { border: 1px solid var(--azul-300); border-radius: var(--radio); overflow: hidden; }
+.ghl-previa__cabecera { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--azul-950); color: var(--blanco); font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.ghl-previa__cuerpo { padding: 16px; background: var(--azul-50); }
+
+.email-previa { background: var(--blanco); border: 1px solid var(--azul-200); border-radius: var(--radio-sm); overflow: hidden; }
+.email-previa__asunto { padding: 12px 16px; border-bottom: 1px solid var(--azul-200); font-weight: 700; color: var(--azul-900); }
+.email-previa__cuerpo { padding: 16px; font-size: var(--fs-sm); line-height: 1.6; color: var(--azul-800); white-space: pre-line; }
+
+.workflow { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+.workflow li { display: grid; grid-template-columns: 150px 1fr; gap: 14px; position: relative; padding: 0 0 16px 22px; }
+.workflow li::before { content: ''; position: absolute; left: 4px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--azul-600); }
+.workflow li::after { content: ''; position: absolute; left: 8px; top: 18px; bottom: -2px; width: 2px; background: var(--azul-300); }
+.workflow li:last-child::after { display: none; }
+.workflow__espera { font-size: var(--fs-xs); font-weight: 700; color: var(--azul-400); text-transform: uppercase; letter-spacing: 0.04em; padding-top: 2px; }
+.workflow__mensaje { background: var(--blanco); border: 1px solid var(--azul-200); border-radius: var(--radio-sm); padding: 10px 12px; font-size: var(--fs-sm); color: var(--azul-800); }
+
+.post-previa { display: grid; grid-template-columns: 180px 1fr; gap: 16px; background: var(--blanco); border: 1px solid var(--azul-200); border-radius: var(--radio-sm); padding: 14px; }
+.post-previa__imagen { display: grid; place-items: center; aspect-ratio: 1; border-radius: var(--radio-sm); background: var(--grad-naranja); color: var(--blanco); font-size: var(--fs-xs); font-weight: 700; text-align: center; padding: 12px; }
+.post-previa__copy { font-size: var(--fs-sm); line-height: 1.6; color: var(--azul-800); margin-top: 8px; }
+
+.variable-ghl { font-family: ui-monospace, Consolas, monospace; font-size: 0.9em; padding: 1px 5px; border-radius: 4px; background: var(--azul-200); color: var(--azul-900); }

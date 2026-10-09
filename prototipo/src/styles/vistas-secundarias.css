@@ -1,0 +1,234 @@
+/*
+ * Vistas secundarias: Oportunidades (US-11), Escalados (US-12), Casos del especialista (US-14)
+ * y Tablero del líder (US-15). Todas las clases llevan el prefijo vs- para no chocar con app.css.
+ */
+
+/* ---------- Diálogo ---------- */
+
+.vs-capa {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(8, 32, 63, 0.45);
+  backdrop-filter: blur(2px);
+}
+.vs-dialogo {
+  width: 100%;
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  background: var(--blanco);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra-oscura);
+}
+.vs-dialogo__cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 20px 12px 24px;
+}
+.vs-dialogo__cabecera p { margin-top: 4px; }
+.vs-dialogo__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 24px 20px;
+  overflow-y: auto;
+}
+.vs-dialogo__pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--azul-200);
+}
+
+/* ---------- Formularios ---------- */
+
+.vs-campo { display: flex; flex-direction: column; gap: 6px; }
+.vs-campo__etiqueta {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--azul-400);
+}
+.vs-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--azul-300);
+  border-radius: var(--radio-sm);
+  background: var(--blanco);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  color: var(--azul-950);
+  resize: vertical;
+}
+.vs-control:focus { outline: 2px solid var(--azul-600); outline-offset: 1px; border-color: transparent; }
+
+/* ---------- Pestañas ---------- */
+
+.vs-pestanas {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--azul-200);
+}
+.vs-pestana {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--azul-800);
+  cursor: pointer;
+}
+.vs-pestana:hover { color: var(--azul-600); }
+.vs-pestana.activo { color: var(--azul-900); font-weight: 800; border-bottom-color: var(--naranja); }
+.vs-pestana__n {
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: var(--radio-pill);
+  background: var(--azul-200);
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+.vs-pestana.activo .vs-pestana__n { background: var(--azul-900); color: var(--blanco); }
+
+/* ---------- Métricas de resumen ---------- */
+
+.vs-metrica {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 18px;
+  border: 1px solid var(--azul-200);
+  border-radius: var(--radio);
+  background: var(--blanco);
+  box-shadow: var(--sombra-suave);
+}
+.vs-metrica__valor {
+  font-size: var(--fs-tit2);
+  font-weight: 800;
+  letter-spacing: var(--tracking-titulo);
+  line-height: 1.1;
+  color: var(--azul-900);
+}
+.vs-metrica__texto { font-size: var(--fs-sm); font-weight: 600; color: var(--azul-800); }
+.vs-metrica--rojo { border-left: 5px solid var(--salud-rojo); }
+.vs-metrica--rojo .vs-metrica__valor { color: var(--salud-rojo); }
+.vs-metrica--verde { border-left: 5px solid var(--salud-verde); }
+.vs-metrica--azul { border-left: 5px solid var(--azul-600); }
+.vs-metrica--naranja { border-left: 5px solid var(--naranja); }
+button.vs-metrica { text-align: left; font-family: inherit; cursor: pointer; transition: box-shadow 0.15s; }
+button.vs-metrica:hover { box-shadow: var(--sombra-clara); }
+button.vs-metrica.activo { border-color: var(--azul-600); background: var(--azul-50); }
+
+/* ---------- Oportunidades (US-11) ---------- */
+
+.vs-oportunidades { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.vs-oportunidad { display: flex; flex-direction: column; gap: 12px; }
+.vs-oportunidad__cabecera { display: flex; align-items: flex-start; gap: 12px; }
+.vs-oportunidad__titulo { font-weight: 800; color: var(--azul-900); letter-spacing: -0.01em; }
+.vs-oportunidad__bloque { font-size: var(--fs-sm); color: var(--azul-800); }
+.vs-oportunidad__bloque strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--azul-400);
+}
+.vs-oportunidad__pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  margin-top: auto;
+  border-top: 1px solid var(--azul-200);
+}
+.vs-oportunidad--cerrada { opacity: 0.78; }
+
+.vs-embudo { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); font-weight: 700; color: var(--azul-400); }
+.vs-embudo__paso { padding: 2px 8px; border-radius: var(--radio-pill); background: var(--azul-50); border: 1px solid var(--azul-200); }
+.vs-embudo__paso.hecho { background: var(--azul-200); color: var(--azul-900); border-color: transparent; }
+.vs-embudo__paso.actual { background: var(--azul-900); color: var(--blanco); border-color: transparent; }
+.vs-embudo__paso.aceptada { background: var(--salud-verde-bg); color: var(--salud-verde); border-color: transparent; }
+.vs-embudo__paso.rechazada { background: var(--salud-rojo-bg); color: var(--salud-rojo); border-color: transparent; }
+
+/* ---------- Escalados y casos (US-12, US-14) ---------- */
+
+.vs-caso-fila { cursor: pointer; }
+.vs-caso-fila.seleccionado { background: var(--azul-200) !important; }
+.vs-motivo { max-width: 360px; color: var(--azul-800); }
+
+.vs-dividido { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(380px, 1fr); gap: 20px; align-items: start; }
+.vs-detalle { position: sticky; top: calc(var(--alto-topbar) + 20px); display: flex; flex-direction: column; gap: 16px; }
+
+.vs-respuesta {
+  border: 1px solid #b7e6d1;
+  border-left: 4px solid var(--salud-verde);
+  border-radius: var(--radio);
+  background: linear-gradient(180deg, #f1fbf6 0%, var(--blanco) 70%);
+  padding: 14px 16px;
+  font-size: var(--fs-sm);
+}
+.vs-comentario {
+  border-left: 4px solid var(--azul-600);
+  border-radius: var(--radio-sm);
+  background: var(--azul-50);
+  padding: 12px 14px;
+  font-size: var(--fs-sm);
+}
+.vs-etiqueta {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--azul-400);
+}
+
+.vs-ficha { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; font-size: var(--fs-sm); }
+.vs-ficha dt { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--azul-400); }
+.vs-ficha dd { margin: 2px 0 0; font-weight: 600; color: var(--azul-900); }
+
+.vs-kpis { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+.vs-kpis td { padding: 7px 0; border-bottom: 1px solid var(--azul-200); }
+.vs-kpis tr:last-child td { border-bottom: none; }
+.vs-kpis td:not(:first-child) { text-align: right; font-weight: 700; color: var(--azul-900); }
+
+/* ---------- Tablero del líder (US-15) ---------- */
+
+.vs-fila-ejecutiva { cursor: pointer; }
+.vs-salud-mini { display: inline-flex; gap: 6px; }
+.vs-salud-mini span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 30px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: var(--radio-pill);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+}
+.vs-salud-mini .rojo { background: var(--salud-rojo-bg); color: var(--salud-rojo); }
+.vs-salud-mini .amarillo { background: var(--salud-amarillo-bg); color: #9a6b00; }
+.vs-salud-mini .verde { background: var(--salud-verde-bg); color: var(--salud-verde); }
+.vs-salud-mini .cero { opacity: 0.35; }
+.vs-numero { font-weight: 800; color: var(--azul-900); }
+.vs-numero--alerta { color: var(--salud-rojo); }
+.vs-numero--cero { color: var(--azul-400); font-weight: 600; }

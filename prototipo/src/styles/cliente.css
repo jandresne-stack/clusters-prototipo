@@ -1,0 +1,212 @@
+/* Ficha del cliente (US-3, US-6, US-7, US-8, US-16). */
+
+.ficha-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+.ficha-cabecera__titulo { display: flex; align-items: center; gap: 14px; }
+.ficha-cabecera__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+
+.pestanas {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--azul-200);
+}
+.pestana {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  color: var(--azul-400);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+.pestana:hover { color: var(--azul-900); }
+.pestana.activa { color: var(--azul-900); border-bottom-color: var(--azul-600); }
+.pestana__contador {
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: var(--radio-pill);
+  background: var(--naranja);
+  color: var(--azul-950);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.seccion-titulo { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 26px 0 12px; }
+.seccion-titulo:first-child { margin-top: 0; }
+
+/* ---------- KPIs ---------- */
+
+.rejilla-kpi { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+
+.tarjeta-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 16px 12px;
+  border: 1px solid var(--azul-200);
+  border-radius: var(--radio);
+  background: var(--blanco);
+  box-shadow: var(--sombra-suave);
+}
+.tarjeta-kpi--negocio { border-top: 3px solid var(--azul-600); }
+.tarjeta-kpi__nombre { font-size: var(--fs-sm); font-weight: 700; color: var(--azul-800); }
+.tarjeta-kpi__valor { font-size: var(--fs-sub); font-weight: 800; letter-spacing: var(--tracking-titulo); color: var(--azul-900); }
+.tarjeta-kpi__meta { font-size: var(--fs-xs); color: var(--azul-800); font-weight: 600; }
+.tarjeta-kpi__fuente { margin-top: auto; padding-top: 6px; font-size: 11px; font-weight: 600; color: var(--azul-400); }
+.tarjeta-kpi__sin-datos {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  min-height: 96px;
+  padding: 10px;
+  border: 1px dashed var(--azul-300);
+  border-radius: var(--radio-sm);
+  background: var(--azul-50);
+  color: var(--azul-800);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-align: center;
+}
+
+.variacion { display: inline-flex; align-items: center; gap: 2px; font-size: var(--fs-xs); font-weight: 700; }
+.variacion--buena { color: var(--salud-verde); }
+.variacion--mala { color: var(--salud-rojo); }
+.variacion--neutra { color: var(--azul-400); }
+
+.tendencia { position: relative; margin-top: 6px; }
+.tendencia svg { display: block; width: 100%; height: 56px; overflow: visible; }
+.tendencia__linea { fill: none; stroke: var(--azul-600); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.tendencia__meta { stroke: var(--azul-400); stroke-width: 1; stroke-dasharray: 4 4; vector-effect: non-scaling-stroke; }
+.tendencia__guia { stroke: var(--azul-300); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.tendencia__punto { fill: var(--azul-600); stroke: var(--blanco); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.tendencia__ejes { display: flex; justify-content: space-between; font-size: 10px; color: var(--azul-400); font-weight: 600; }
+.tendencia__leyenda-meta { letter-spacing: 0.02em; }
+.tendencia__tooltip {
+  position: absolute;
+  top: -30px;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--azul-950);
+  color: var(--blanco);
+  font-size: 11px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--sombra-oscura);
+}
+
+/* ---------- Planeación ---------- */
+
+.ruta { display: grid; grid-template-columns: repeat(7, minmax(150px, 1fr)); gap: 12px; overflow-x: auto; padding-bottom: 6px; }
+.ruta__etapa { display: flex; flex-direction: column; gap: 10px; }
+.ruta__etapa-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--azul-400);
+}
+.ruta__numero {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--grad-primario);
+  color: var(--blanco);
+  font-size: 11px;
+}
+.artefacto {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--azul-200);
+  border-radius: var(--radio);
+  background: var(--blanco);
+  box-shadow: var(--sombra-suave);
+  font-size: var(--fs-xs);
+}
+.artefacto h4 { font-size: var(--fs-sm); }
+.artefacto--aprobado { border-left: 4px solid var(--salud-verde); }
+.artefacto--esperando { border-left: 4px solid var(--naranja); background: #fffaf2; }
+.artefacto--curso { border-left: 4px solid var(--azul-600); }
+.artefacto--bloqueado { opacity: 0.7; background: var(--azul-50); border-style: dashed; }
+.artefacto--no-iniciado { border-left: 4px solid var(--azul-300); }
+
+.estado-artefacto { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; }
+
+/* ---------- Equipo ---------- */
+
+.tarjeta-agente {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--azul-200);
+  border-radius: var(--radio);
+  background: var(--blanco);
+  box-shadow: var(--sombra-suave);
+}
+.tarjeta-agente--inactiva { background: var(--azul-50); box-shadow: none; border-style: dashed; }
+.tarjeta-agente--inactiva .tarjeta-agente__cabecera { opacity: 0.6; }
+.tarjeta-agente__cabecera { display: flex; align-items: center; gap: 10px; }
+.icono-agente {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--grad-naranja);
+  color: var(--blanco);
+}
+.tarjeta-agente__cifras { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cifra { padding: 8px 10px; border-radius: var(--radio-sm); background: var(--azul-50); }
+.cifra strong { display: block; font-size: var(--fs-sub); font-weight: 800; color: var(--azul-900); letter-spacing: -0.03em; line-height: 1.1; }
+.cifra span { font-size: 11px; font-weight: 600; color: var(--azul-800); }
+
+.estado-agente { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-xs); font-weight: 800; }
+.estado-agente::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.estado-agente--trabajando { color: var(--salud-verde); }
+.estado-agente--esperando { color: #b86a00; }
+.estado-agente--bloqueado { color: var(--salud-rojo); }
+.estado-agente--pausa { color: var(--azul-400); }
+
+/* ---------- Plan mensual ---------- */
+
+.tarea-plan { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--azul-200); }
+.tarea-plan:last-child { border-bottom: none; }
+.tarea-plan--fuera { opacity: 0.5; }
+.tarea-plan--fuera .tarea-plan__titulo { text-decoration: line-through; }
+.tarea-plan__titulo { font-weight: 700; color: var(--azul-900); font-size: var(--fs-sm); }
+.tarea-plan__acciones { margin-left: auto; display: flex; gap: 6px; }
+
+/* ---------- Formularios (leads, alta) ---------- */
+
+.campo-texto {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--azul-300);
+  border-radius: var(--radio-sm);
+  background: var(--blanco);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  color: var(--azul-950);
+}
+.campo-texto:focus { outline: 2px solid var(--azul-600); outline-offset: 1px; border-color: transparent; }
+textarea.campo-texto { resize: vertical; min-height: 64px; line-height: 1.4; }

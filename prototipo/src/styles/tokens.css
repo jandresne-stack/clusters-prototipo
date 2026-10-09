@@ -1,0 +1,62 @@
+/*
+ * Identidad visual AgeentIA (AMD Group), extraída del Figma "AgeentIA" > Home (nodo 9:48).
+ * Las variables 1–10 del Figma son la escala de azules; "B" es el naranja del logo.
+ */
+:root {
+  /* Azules (variables Figma 4, 1, 5, 2, 6, 7, 8, 9) */
+  --azul-950: #08203f; /* fondo hero, barra lateral */
+  --azul-900: #01346b; /* primario: títulos, logo */
+  --azul-800: #284365; /* texto secundario oscuro */
+  --azul-600: #0a55cc; /* acento: palabras destacadas, enlaces, botones */
+  --azul-400: #7993b4; /* texto atenuado, iconos inactivos */
+  --azul-300: #b2c5dd; /* bordes */
+  --azul-200: #d8e5f6; /* fondos de chips, filas resaltadas */
+  --azul-50: #f5f9ff; /* fondo de página */
+  --blanco: #ffffff;
+
+  /* Acentos */
+  --naranja: #ff9300; /* variable "B": isotipo, insignias de agente */
+  --naranja-claro: #ffb24d;
+  --verde-cta: #4dcb96; /* botón "Solicita un Demo" */
+  --verde-cta-hover: #3bb884;
+
+  /* Semáforo de salud (afinado a la paleta) */
+  --salud-verde: #1fa971;
+  --salud-verde-bg: #e3f6ee;
+  --salud-amarillo: #e6a100;
+  --salud-amarillo-bg: #fff4d6;
+  --salud-rojo: #e0414f;
+  --salud-rojo-bg: #fde7e9;
+
+  /* Degradados del Figma */
+  --grad-primario: linear-gradient(90deg, #01346b 0%, #0a55cc 100%);
+  --grad-naranja: linear-gradient(135deg, #ffb24d 0%, #ff7a00 100%);
+  --grad-hero: radial-gradient(120% 90% at 75% 40%, #0d3d86 0%, #08203f 60%);
+
+  /* Sombras (estilos Figma "sombra f.claro" y "sombra 2 f. osc") */
+  --sombra-clara: 11px 12px 40px rgba(13, 81, 251, 0.16);
+  --sombra-oscura: 5px 6px 17px rgba(1, 52, 107, 0.3);
+  --sombra-suave: 0 2px 10px rgba(1, 52, 107, 0.08);
+
+  /* Tipografía: Manrope (estilos Figma Tit, Tit2, sub, txt, card, botones) */
+  --fuente: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-tit: 36px;
+  --fs-tit2: 28px;
+  --fs-sub: 24px;
+  --fs-boton: 20px;
+  --fs-txt: 18px;
+  --fs-card: 16px;
+  --fs-sm: 14px;
+  --fs-xs: 12px;
+  --tracking-titulo: -0.04em;
+
+  /* Forma */
+  --radio-sm: 8px;
+  --radio: 14px;
+  --radio-lg: 20px;
+  --radio-pill: 999px;
+
+  /* Layout */
+  --ancho-sidebar: 248px;
+  --alto-topbar: 64px;
+}
