@@ -210,3 +210,9 @@
 }
 .campo-texto:focus { outline: 2px solid var(--azul-600); outline-offset: 1px; border-color: transparent; }
 textarea.campo-texto { resize: vertical; min-height: 64px; line-height: 1.4; }
+
+/* Pestaña Información del cliente */
+.info-cliente { display: grid; gap: 10px; margin: 0; }
+.info-cliente > div { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: center; }
+.info-cliente dt { color: var(--azul-400); font-size: var(--fs-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.info-cliente dd { margin: 0; color: var(--azul-950); font-weight: 600; }

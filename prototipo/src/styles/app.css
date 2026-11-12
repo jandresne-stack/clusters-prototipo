@@ -437,3 +437,38 @@ button { font-family: inherit; }
   color: #7a5500;
 }
 .alerta-fila--error { background: var(--salud-rojo-bg); color: #a82633; }
+
+/* Menú del cliente en el lateral: recorrido cliente → comercial/CRM → servicios → resultados. */
+.sidebar { overflow-y: auto; }
+.menu-cliente {
+  margin: 4px 0 6px;
+  padding: 10px 6px 8px;
+  border-radius: var(--radio-sm);
+  background: rgba(255, 255, 255, 0.05);
+}
+.menu-cliente__cabecera {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 6px 4px;
+  color: var(--blanco);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  line-height: 1.25;
+}
+.sidebar__seccion--paso { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.sidebar__paso {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 147, 0, 0.18);
+  color: var(--naranja-claro);
+  font-size: 10px;
+  letter-spacing: 0;
+}
+.menu-cliente .nav-item { padding: 8px 12px; }
+.nav-item--sutil { color: var(--azul-400); font-style: italic; }
+.nav-item--compacto { padding: 7px 12px; font-size: var(--fs-xs); }
+.nav-item svg { flex-shrink: 0; }

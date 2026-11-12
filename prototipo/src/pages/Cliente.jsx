@@ -17,6 +17,8 @@ import { TabAutomatizaciones } from './cliente/TabAutomatizaciones.jsx';
 import { OportunidadesCliente } from './Oportunidades.jsx';
 import { DialogoSolicitud } from '../components/secundarios.jsx';
 import { TabLeads } from './cliente/TabLeads.jsx';
+import { TabInfo } from './cliente/TabInfo.jsx';
+import { tabsCliente, tieneLeads } from '../lib/navCliente.js';
 import '../styles/cliente.css';
 
 const etiquetaGhl = { conectado: 'GHL conectado', pendiente: 'GHL pendiente', desconectado: 'GHL desconectado' };
@@ -25,7 +27,7 @@ const varianteGhl = { conectado: 'verde', pendiente: 'amarillo', desconectado: '
 /** Ficha del cliente: planeación, equipo de agentes, KPIs, plan mensual y automatizaciones GHL. */
 export function Cliente() {
   const { id } = useParams();
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const datos = useDatos();
   const { rol } = useSesion();
   const navigate = useNavigate();
@@ -50,22 +52,11 @@ export function Cliente() {
   const ruta = rutaPlaneacion(cliente, datos.aprobaciones);
   const listo = !cliente.onboarding && listoParaEjecucion(ruta);
   const pendientesCliente = datos.aprobaciones.filter((a) => a.cliente === id && esPendiente(a));
-  const planPendiente = pendientesCliente.some((a) => a.tipo === 'plan-mensual');
   const porActivar = datos.oportunidades.filter((o) => o.cliente === id && o.estado === 'Aceptada' && !cliente.servicios.includes(o.servicio));
 
-  const pestanas = [
-    { id: 'kpis', nombre: 'KPIs' },
-    { id: 'equipo', nombre: 'Equipo de agentes' },
-    { id: 'planeacion', nombre: 'Planeación', contador: ruta.filter((a) => a.estado === 'Esperando aprobación').length },
-    { id: 'plan', nombre: 'Plan mensual', contador: planPendiente ? 1 : 0 },
-    { id: 'automatizaciones', nombre: 'Automatizaciones GHL', contador: pendientesCliente.filter((a) => a.ghl).length },
-    ...(!cliente.onboarding && (cliente.servicios.includes('SEM') || cliente.servicios.includes('Pauta'))
-      ? [{ id: 'leads', nombre: 'Leads', contador: datos.lotesLeads.filter((l) => l.cliente === id && l.estado === 'Pendiente').length }]
-      : []),
-    { id: 'oportunidades', nombre: 'Oportunidades', contador: datos.oportunidades.filter((o) => o.cliente === id && (o.estado === 'Detectada' || o.estado === 'Propuesta al cliente')).length },
-  ];
-  const tab = params.get('tab') ?? (cliente.onboarding ? 'planeacion' : 'kpis');
-  const irA = (t) => setParams(lectura && params.get('lectura') ? { tab: t, lectura: '1' } : { tab: t });
+  // La navegación entre secciones vive en el menú lateral (lib/navCliente.js), en el orden del recorrido.
+  const pedida = params.get('tab');
+  const tab = tabsCliente.includes(pedida) && (pedida !== 'leads' || tieneLeads(cliente)) ? pedida : cliente.onboarding ? 'info' : 'kpis';
 
   const activar = (oportunidad) =>
     datos.actualizarCliente(cliente.id, (c) => ({
@@ -165,17 +156,9 @@ export function Cliente() {
         ))}
       </div>
 
-      <nav className="pestanas">
-        {pestanas.map((p) => (
-          <button key={p.id} className={`pestana${tab === p.id ? ' activa' : ''}`} onClick={() => irA(p.id)}>
-            {p.nombre}
-            {p.contador > 0 && <span className="pestana__contador">{p.contador}</span>}
-          </button>
-        ))}
-      </nav>
-
       {solicitud && <DialogoSolicitud cliente={cliente} onCerrar={() => setSolicitud(false)} />}
 
+      {tab === 'info' && <TabInfo cliente={cliente} ruta={ruta} lectura={lectura} />}
       {tab === 'kpis' && <TabKpis cliente={cliente} />}
       {tab === 'equipo' && <TabEquipo cliente={cliente} datos={datos} lectura={lectura} />}
       {tab === 'planeacion' && <TabPlaneacion cliente={cliente} ruta={ruta} lectura={lectura} />}
