@@ -1,4 +1,5 @@
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { seccionesCliente } from '../lib/navCliente.js';
 import {
   BriefcaseBusiness,
   Inbox,
@@ -39,6 +40,8 @@ export function Layout() {
   const { rol, persona } = useSesion();
   const datos = useDatos();
   const navigate = useNavigate();
+  const enCliente = useMatch('/clientes/:id/*');
+  const cliente = enCliente && datos.clientes.find((c) => c.id === enCliente.params.id);
 
   return (
     <div className="app">
@@ -54,12 +57,14 @@ export function Layout() {
           </button>
         )}
 
+        {cliente && <MenuCliente cliente={cliente} datos={datos} />}
+
         <div className="sidebar__seccion">{rol === 'ejecutiva' ? 'Mi trabajo' : 'Vista'}</div>
         {navegacion[rol].map(({ a, texto, icono: Icono, contador }) => {
           const n = contador?.(persona, datos);
           return (
-            <NavLink key={a} to={a} className={({ isActive }) => `nav-item${isActive ? ' activo' : ''}`}>
-              <Icono size={18} />
+            <NavLink key={a} to={a} className={({ isActive }) => `nav-item${cliente ? ' nav-item--compacto' : ''}${isActive ? ' activo' : ''}`}>
+              <Icono size={cliente ? 16 : 18} />
               {texto}
               {n > 0 && <span className="nav-item__contador">{n}</span>}
             </NavLink>
@@ -90,6 +95,59 @@ export function Layout() {
           <Outlet />
         </main>
       </div>
+    </div>
+  );
+}
+
+/** Menú del cliente abierto, en el orden del recorrido: cliente → comercial/CRM → servicios → resultados. */
+function MenuCliente({ cliente, datos }) {
+  const { pathname, search } = useLocation();
+  const params = new URLSearchParams(search);
+  const lectura = params.get('lectura') === '1';
+  const enReporte = pathname.endsWith('/reporte');
+  // El chat con un agente (/clientes/:id/agentes/:canal) cuenta como la sección de ese servicio.
+  const chat = pathname.match(/\/agentes\/([^/]+)/);
+  const tabActual = enReporte ? null : chat ? 'equipo' : params.get('tab') ?? (cliente.onboarding ? 'info' : 'kpis');
+  const agenteActual = chat ? decodeURIComponent(chat[1]) : params.get('agente');
+
+  const destino = (item) => {
+    if (item.ruta) return `/clientes/${cliente.id}/${item.ruta}${lectura ? '?lectura=1' : ''}`;
+    const p = new URLSearchParams({ tab: item.tab });
+    if (item.agente) p.set('agente', item.agente);
+    if (lectura) p.set('lectura', '1');
+    return `/clientes/${cliente.id}?${p}`;
+  };
+  const esActivo = (item) =>
+    item.ruta ? enReporte && pathname.endsWith(`/${item.ruta}`) : item.tab === tabActual && (item.agente ?? null) === (item.tab === 'equipo' ? agenteActual : null);
+
+  return (
+    <div className="menu-cliente">
+      <div className="menu-cliente__cabecera">
+        <Avatar nombre={cliente.nombre} color={cliente.color} tamano={28} />
+        <span>{cliente.nombre}</span>
+      </div>
+      {seccionesCliente(cliente, datos).map((seccion, i) => (
+        <div key={seccion.titulo}>
+          <div className="sidebar__seccion sidebar__seccion--paso">
+            <span className="sidebar__paso">{i + 1}</span>
+            {seccion.titulo}
+          </div>
+          {seccion.items.map((item) => {
+            const Icono = item.icono;
+            return (
+              <Link
+                key={item.nombre}
+                to={destino(item)}
+                className={`nav-item${item.sutil ? ' nav-item--sutil' : ''}${esActivo(item) ? ' activo' : ''}`}
+              >
+                <Icono size={17} />
+                {item.nombre}
+                {item.contador > 0 && <span className="nav-item__contador">{item.contador}</span>}
+              </Link>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
 }
