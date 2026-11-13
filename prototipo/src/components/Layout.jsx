@@ -8,6 +8,7 @@ import {
   Sparkles,
   UserPlus,
   Users,
+  Library,
 } from 'lucide-react';
 import { inicioPorRol, personasPorRol, roles, useSesion } from '../context/SesionContext.jsx';
 import { clientes } from '../data/clientes.js';
@@ -65,6 +66,17 @@ export function Layout() {
           );
         })}
 
+        {/* Agentes reales: biblioteca con todos los agentes y proyectos sueltos por cliente */}
+        <div className="sidebar__seccion">Agentes IA</div>
+        <NavLink
+          to="/agentes"
+          className={({ isActive }) => `nav-item${isActive ? ' activo' : ''}`}
+          title={datos.motor.conectado === false ? 'Motor de agentes desconectado' : 'Motor de agentes conectado'}
+        >
+          <Library size={18} /> Biblioteca de agentes
+          <span className={`estado-motor estado-motor--${datos.motor.conectado === false ? 'off' : datos.motor.conectado ? 'on' : 'espera'}`} />
+        </NavLink>
+
         <div className="sidebar__pie">
           <NavLink to="/estilo" className={({ isActive }) => `nav-item${isActive ? ' activo' : ''}`}>
             <Palette size={18} /> Guía de estilo
@@ -92,6 +104,7 @@ const nombreSeccion = {
   casos: 'Casos escalados',
   equipo: 'Tablero del equipo',
   estilo: 'Guía de estilo',
+  agentes: 'Biblioteca de agentes',
 };
 
 function Topbar() {

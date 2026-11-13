@@ -17,6 +17,7 @@ import { TabAutomatizaciones } from './cliente/TabAutomatizaciones.jsx';
 import { OportunidadesCliente } from './Oportunidades.jsx';
 import { DialogoSolicitud } from '../components/secundarios.jsx';
 import { TabLeads } from './cliente/TabLeads.jsx';
+import { TabDocumentosBase } from './cliente/TabDocumentosBase.jsx';
 import '../styles/cliente.css';
 
 const etiquetaGhl = { conectado: 'GHL conectado', pendiente: 'GHL pendiente', desconectado: 'GHL desconectado' };
@@ -56,6 +57,7 @@ export function Cliente() {
   const pestanas = [
     { id: 'kpis', nombre: 'KPIs' },
     { id: 'equipo', nombre: 'Equipo de agentes' },
+    { id: 'base', nombre: 'Documentos base' },
     { id: 'planeacion', nombre: 'Planeación', contador: ruta.filter((a) => a.estado === 'Esperando aprobación').length },
     { id: 'plan', nombre: 'Plan mensual', contador: planPendiente ? 1 : 0 },
     { id: 'automatizaciones', nombre: 'Automatizaciones GHL', contador: pendientesCliente.filter((a) => a.ghl).length },
@@ -178,6 +180,7 @@ export function Cliente() {
 
       {tab === 'kpis' && <TabKpis cliente={cliente} />}
       {tab === 'equipo' && <TabEquipo cliente={cliente} datos={datos} lectura={lectura} />}
+      {tab === 'base' && <TabDocumentosBase cliente={cliente} lectura={lectura} />}
       {tab === 'planeacion' && <TabPlaneacion cliente={cliente} ruta={ruta} lectura={lectura} />}
       {tab === 'plan' && <TabPlan cliente={cliente} ruta={ruta} listo={listo} lectura={lectura} />}
       {tab === 'automatizaciones' && <TabAutomatizaciones cliente={cliente} lectura={lectura} />}

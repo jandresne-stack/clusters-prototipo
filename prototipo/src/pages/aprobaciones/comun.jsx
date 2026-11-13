@@ -15,6 +15,8 @@ export const nombreTipoGhl = { email: 'Campaña de email', workflow: 'Workflow d
 
 /** 'SEO' -> 'Agente SEO' (nombre del catálogo). */
 export function nombreAgente(id) {
+  if (id === 'CMO') return 'CMO del cliente';
+  if (id === 'Estrategia') return 'Equipo de agentes';
   return servicioPorId[id]?.agente ?? `Agente ${id}`;
 }
 

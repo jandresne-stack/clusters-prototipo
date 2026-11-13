@@ -21,7 +21,7 @@ const pasos = [
 ];
 
 // Categorías del Kick-off de la metodología AMD (PREGUNTAS KICK OFF).
-const camposKickoff = [
+export const camposKickoff = [
   ['lineas', 'Líneas de negocio y servicios prioritarios'],
   ['competidores', 'Competidores'],
   ['crm', 'CRM y proceso comercial'],
@@ -41,7 +41,7 @@ const camposKickoff = [
 ];
 
 // Campos de cada brief (BRIEF por línea de negocio).
-const camposBrief = [
+export const camposBrief = [
   ['momento', 'Momento de la marca'],
   ['competidores', 'Competidores directos'],
   ['perfilEmpresa', 'Perfil de empresa'],

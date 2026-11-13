@@ -1,4 +1,5 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { aprobacionesReales, guardarAprobacion, pedirCambiosAlAgente } from '../lib/motor.js';
 import { clientes as clientesIniciales } from '../data/clientes.js';
 import { aprobaciones as aprobacionesIniciales } from '../data/aprobaciones.js';
 import { oportunidades as oportunidadesIniciales } from '../data/oportunidades.js';
@@ -32,6 +33,9 @@ function useColeccion(inicial) {
       quitar(id) {
         setLista((l) => l.filter((item) => item.id !== id));
       },
+      reemplazar(fn) {
+        setLista(fn);
+      },
     }),
     [],
   );
@@ -46,6 +50,57 @@ export function DatosProvider({ children }) {
   const [automatizaciones, aut] = useColeccion(automatizacionesIniciales);
   const [lotesLeads, lot] = useColeccion(lotesIniciales);
 
+  // ---------- Agentes reales (motor: agency-agents/panel) ----------
+  // Las propuestas que envían los agentes reales se suman a la bandeja junto a las de ejemplo.
+  // Sus cambios de estado se guardan en el motor; "Pedir cambios" se lo devuelve al agente.
+  const aprobacionesRef = useRef(aprobaciones);
+  aprobacionesRef.current = aprobaciones;
+  const [motor, setMotor] = useState({ conectado: null, trabajando: [] });
+
+  const recargarAprobacionesReales = useCallback(async () => {
+    try {
+      const reales = (await aprobacionesReales()).map((a) => ({
+        ...a,
+        // El prototipo vive en una fecha fija (HOY); una propuesta real nunca sale "del futuro".
+        creadoReal: a.creado,
+        creado: a.creado > HOY ? HOY : a.creado,
+      }));
+      apr.reemplazar((l) => [...reales, ...l.filter((x) => x.origen !== 'agente-real')]);
+      setMotor((m) => (m.conectado ? m : { ...m, conectado: true }));
+    } catch {
+      setMotor((m) => ({ ...m, conectado: false }));
+    }
+  }, [apr]);
+
+  useEffect(() => {
+    recargarAprobacionesReales();
+    const t = setInterval(recargarAprobacionesReales, 20000);
+    return () => clearInterval(t);
+  }, [recargarAprobacionesReales]);
+
+  const actualizarAprobacion = useCallback(
+    (id, cambios) => {
+      const actual = aprobacionesRef.current.find((a) => a.id === id);
+      apr.actualizar(id, cambios);
+      if (actual?.origen !== 'agente-real') return;
+      const delta = typeof cambios === 'function' ? cambios(actual) : cambios;
+      const guardado = guardarAprobacion(id, delta).catch(() => {});
+      if (delta.estado === 'En curso por agente' && actual.estado !== 'En curso por agente') {
+        const comentario = [...(delta.historial ?? [])].reverse().find((h) => h.texto?.startsWith('Pedir cambios:'))?.texto.replace('Pedir cambios: ', '') ?? '';
+        setMotor((m) => ({ ...m, trabajando: [...m.trabajando, id] }));
+        // Primero queda guardado el comentario; luego el agente rehace (si no, pisaría su nueva versión)
+        guardado
+          .then(() => pedirCambiosAlAgente(actual, comentario))
+          .catch(() => {})
+          .finally(() => {
+            setMotor((m) => ({ ...m, trabajando: m.trabajando.filter((x) => x !== id) }));
+            recargarAprobacionesReales();
+          });
+      }
+    },
+    [apr, recargarAprobacionesReales],
+  );
+
   const valor = useMemo(
     () => ({
       clientes,
@@ -53,7 +108,9 @@ export function DatosProvider({ children }) {
       agregarCliente: cli.agregar,
 
       aprobaciones,
-      actualizarAprobacion: apr.actualizar,
+      actualizarAprobacion,
+      recargarAprobacionesReales,
+      motor,
       agregarAprobacion: apr.agregar,
       quitarAprobacion: apr.quitar,
 
@@ -72,7 +129,7 @@ export function DatosProvider({ children }) {
       lotesLeads,
       actualizarLote: lot.actualizar,
     }),
-    [clientes, aprobaciones, oportunidades, escalados, automatizaciones, lotesLeads, cli, apr, opo, esc, aut, lot],
+    [clientes, aprobaciones, oportunidades, escalados, automatizaciones, lotesLeads, cli, apr, opo, esc, aut, lot, actualizarAprobacion, recargarAprobacionesReales, motor],
   );
 
   return <DatosContext.Provider value={valor}>{children}</DatosContext.Provider>;

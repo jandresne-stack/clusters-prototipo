@@ -1,9 +1,11 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Bot, ChevronRight, Sparkles } from 'lucide-react';
+import { ArrowLeft, CalendarRange, ChevronRight, MessageSquare, Sparkles } from 'lucide-react';
 import { servicios } from '../../data/catalogos.js';
 import { resumenAgente } from '../../lib/agentes.js';
 import { formatoFecha } from '../../lib/formato.js';
 import { Chip, InsigniaGhl } from '../../components/ui.jsx';
+import { FormaAgente } from '../../components/FormaAgente.jsx';
+import { useEquipo } from '../../lib/equipo.js';
 
 const claseEstado = {
   Trabajando: 'trabajando',
@@ -28,21 +30,58 @@ export function TabEquipo({ cliente, datos, lectura }) {
     setParams(p);
   };
 
-  if (detalle) return <DetalleAgente agente={detalle} volver={() => abrir(null)} />;
+  if (detalle) return <DetalleAgente agente={detalle} volver={() => abrir(null)} cliente={cliente} />;
 
   return (
-    <div className="rejilla rejilla-3">
-      {agentes.map((a) => (a.contratado ? <TarjetaAgente key={a.canal} agente={a} abrir={abrir} /> : <AgenteNoContratado key={a.canal} agente={a} cliente={cliente} lectura={lectura} />))}
+    <>
+      <TarjetaCMO cliente={cliente} lectura={lectura} />
+      <div className="rejilla rejilla-3">
+      {agentes.map((a) => (a.contratado ? <TarjetaAgente key={a.canal} agente={a} abrir={abrir} cliente={cliente} /> : <AgenteNoContratado key={a.canal} agente={a} cliente={cliente} lectura={lectura} />))}
+      </div>
+    </>
+  );
+}
+
+/** El CMO del cliente coordina al equipo: diagnóstico, plan mensual y encargos a cada agente. */
+function TarjetaCMO({ cliente, lectura }) {
+  return (
+    <div className="tarjeta tarjeta-cmo">
+      <FormaAgente semilla="amd--cmo" canal="CMO" tamano={52} titulo="CMO del cliente" />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <h3>CMO del cliente</h3>
+        <p className="texto-sm" style={{ color: 'var(--azul-800)', marginTop: 2 }}>
+          Coordina al equipo de {cliente.nombre}: lee los documentos base, los KPIs y la planeación, arma el plan mensual y le encarga trabajo a cada agente cuando
+          lo confirmas.
+        </p>
+      </div>
+      <div className="fila fila--envolver" style={{ gap: 8 }}>
+        <Link to={`/clientes/${cliente.id}/agentes/CMO`} className="boton boton--primario">
+          <MessageSquare size={16} /> Hablar con el CMO
+        </Link>
+        {!lectura && !cliente.onboarding && (
+          <Link to={`/clientes/${cliente.id}/agentes/CMO?pedir=plan`} className="boton boton--secundario">
+            <CalendarRange size={16} /> Pedir plan del mes
+          </Link>
+        )}
+      </div>
     </div>
   );
 }
 
+// Así se mueve la forma según lo que está haciendo el agente
+const estadoForma = { Trabajando: 'pensando', 'Diagnóstico inicial en curso': 'pensando' };
+
 function CabeceraAgente({ agente }) {
+  const equipo = useEquipo();
   return (
     <div className="tarjeta-agente__cabecera">
-      <span className="icono-agente">
-        <Bot size={20} />
-      </span>
+      <FormaAgente
+        semilla={equipo?.[agente.canal]?.principal.id ?? agente.canal}
+        canal={agente.canal}
+        tamano={40}
+        estado={agente.contratado ? estadoForma[agente.estado] ?? 'reposo' : 'reposo'}
+        titulo={agente.nombre}
+      />
       <div style={{ minWidth: 0 }}>
         <h3>{agente.nombre}</h3>
         {agente.contratado && <span className={`estado-agente estado-agente--${claseEstado[agente.estado]}`}>{agente.estado}</span>}
@@ -51,7 +90,7 @@ function CabeceraAgente({ agente }) {
   );
 }
 
-function TarjetaAgente({ agente: a, abrir }) {
+function TarjetaAgente({ agente: a, abrir, cliente }) {
   return (
     <div className="tarjeta-agente">
       <CabeceraAgente agente={a} />
@@ -83,11 +122,16 @@ function TarjetaAgente({ agente: a, abrir }) {
           <strong>Última acción · {formatoFecha(a.ultima.fecha)}:</strong> {a.ultima.texto}
         </div>
       )}
-      {conDetalle.includes(a.canal) && (
-        <button className="boton boton--secundario" style={{ alignSelf: 'flex-start' }} onClick={() => abrir(a.canal)}>
-          Ver tareas <ChevronRight size={16} />
-        </button>
-      )}
+      <div className="fila fila--envolver" style={{ gap: 8 }}>
+        <Link to={`/clientes/${cliente.id}/agentes/${a.canal}`} className="boton boton--primario">
+          <MessageSquare size={16} /> Abrir chat
+        </Link>
+        {conDetalle.includes(a.canal) && (
+          <button className="boton boton--secundario" onClick={() => abrir(a.canal)}>
+            Ver tareas <ChevronRight size={16} />
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -115,14 +159,19 @@ const claseTarea = {
   Escalado: 'rojo',
 };
 
-function DetalleAgente({ agente: a, volver }) {
+function DetalleAgente({ agente: a, volver, cliente }) {
   return (
     <>
       <button className="boton boton--fantasma" onClick={volver} style={{ marginBottom: 12 }}>
         <ArrowLeft size={16} /> Volver al equipo
       </button>
       <div className="tarjeta" style={{ marginBottom: 16 }}>
-        <CabeceraAgente agente={a} />
+        <div className="fila" style={{ justifyContent: 'space-between' }}>
+          <CabeceraAgente agente={a} />
+          <Link to={`/clientes/${cliente.id}/agentes/${a.canal}`} className="boton boton--primario">
+            <MessageSquare size={16} /> Abrir chat
+          </Link>
+        </div>
         {a.motivo && (
           <div className="alerta alerta--error" style={{ marginTop: 12 }}>
             {a.motivo}
