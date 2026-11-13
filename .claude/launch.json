@@ -4,8 +4,27 @@
     {
       "name": "clusters",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "prototipo", "run", "dev"],
+      "runtimeArgs": [
+        "--prefix",
+        "prototipo",
+        "run",
+        "dev"
+      ],
       "port": 5173
+    },
+    {
+      "name": "clusters-build",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "--prefix",
+        "prototipo",
+        "vite",
+        "preview",
+        "prototipo",
+        "--port",
+        "4173"
+      ],
+      "port": 4173
     }
   ]
 }
