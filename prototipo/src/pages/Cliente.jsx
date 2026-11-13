@@ -17,6 +17,7 @@ import { TabAutomatizaciones } from './cliente/TabAutomatizaciones.jsx';
 import { OportunidadesCliente } from './Oportunidades.jsx';
 import { DialogoSolicitud } from '../components/secundarios.jsx';
 import { TabLeads } from './cliente/TabLeads.jsx';
+import { TabDocumentosBase } from './cliente/TabDocumentosBase.jsx';
 import { TabInfo } from './cliente/TabInfo.jsx';
 import { tabsCliente, tieneLeads } from '../lib/navCliente.js';
 import '../styles/cliente.css';
@@ -161,6 +162,7 @@ export function Cliente() {
       {tab === 'info' && <TabInfo cliente={cliente} ruta={ruta} lectura={lectura} />}
       {tab === 'kpis' && <TabKpis cliente={cliente} />}
       {tab === 'equipo' && <TabEquipo cliente={cliente} datos={datos} lectura={lectura} />}
+      {tab === 'base' && <TabDocumentosBase cliente={cliente} lectura={lectura} />}
       {tab === 'planeacion' && <TabPlaneacion cliente={cliente} ruta={ruta} lectura={lectura} />}
       {tab === 'plan' && <TabPlan cliente={cliente} ruta={ruta} listo={listo} lectura={lectura} />}
       {tab === 'automatizaciones' && <TabAutomatizaciones cliente={cliente} lectura={lectura} />}

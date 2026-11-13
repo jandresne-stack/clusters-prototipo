@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router-dom';
 import { SesionProvider } from './context/SesionContext.jsx';
 import { App } from './App.jsx';
 import './styles/app.css';
+import './styles/agentes-reales.css';
 
 // HashRouter: el build se abre como archivos estáticos (base './'), sin servidor que reescriba rutas.
 ReactDOM.createRoot(document.getElementById('root')).render(

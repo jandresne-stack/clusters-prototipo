@@ -8,6 +8,7 @@ import {
   ClipboardList,
   FileText,
   Filter,
+  FolderOpen,
   IdCard,
   PlusCircle,
   Sparkles,
@@ -42,6 +43,7 @@ export function seccionesCliente(cliente, datos) {
       titulo: 'Cliente',
       items: [
         { tab: 'info', nombre: 'Información y kick-off', icono: IdCard },
+        { tab: 'base', nombre: 'Documentos base', icono: FolderOpen },
       ],
     },
     {
@@ -78,4 +80,4 @@ export function seccionesCliente(cliente, datos) {
   ];
 }
 
-export const tabsCliente = ['info', 'leads', 'oportunidades', 'automatizaciones', 'equipo', 'planeacion', 'plan', 'kpis'];
+export const tabsCliente = ['info', 'base', 'leads', 'oportunidades', 'automatizaciones', 'equipo', 'planeacion', 'plan', 'kpis'];

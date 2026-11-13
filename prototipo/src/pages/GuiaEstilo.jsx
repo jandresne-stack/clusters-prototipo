@@ -1,5 +1,16 @@
 import { Bot } from 'lucide-react';
 import { Alerta, Avatar, Chip, Encabezado, InsigniaAgente, InsigniaGhl, Progreso, Semaforo } from '../components/ui.jsx';
+import { FormaAgente } from '../components/FormaAgente.jsx';
+
+// Forma de cada agente de Clusters (una por canal) y sus tres estados
+const formasPorCanal = [
+  ['CMO', 'CMO del cliente', 'amd--cmo'],
+  ['SEO', 'Agente SEO', 'marketing--marketing-seo-specialist'],
+  ['SEM', 'Agente SEM', 'claude--google-ads-specialist'],
+  ['Pauta', 'Agente Pauta social', 'claude--meta-tiktok-specialist'],
+  ['Redes', 'Agente Redes sociales', 'marketing--marketing-social-media-strategist'],
+  ['Email', 'Agente Email marketing', 'marketing--marketing-email-strategist'],
+];
 
 const colores = [
   ['--azul-950', '#08203F', 'Fondo oscuro, barra lateral'],
@@ -140,6 +151,27 @@ export default function GuiaEstilo() {
           </div>
         </section>
       </div>
+
+      <section className="tarjeta" style={{ marginTop: 16 }}>
+        <h3 style={{ marginBottom: 4 }}>Formas de los agentes</h3>
+        <p className="texto-sm atenuado" style={{ marginBottom: 16 }}>
+          Cada canal tiene su forma y cada agente sus colores. En reposo respira lento, pensando se acelera y trabajando (usando herramientas) gira y brilla.
+        </p>
+        <div className="galeria-formas">
+          <span />
+          <strong className="texto-xs atenuado">Reposo</strong>
+          <strong className="texto-xs atenuado">Pensando</strong>
+          <strong className="texto-xs atenuado">Trabajando</strong>
+          {formasPorCanal.map(([canal, nombre, id]) => (
+            <div key={canal} style={{ display: 'contents' }}>
+              <span className="texto-sm" style={{ fontWeight: 700, color: 'var(--azul-900)' }}>{nombre}</span>
+              <FormaAgente semilla={id} canal={canal} tamano={72} estado="reposo" />
+              <FormaAgente semilla={id} canal={canal} tamano={72} estado="pensando" />
+              <FormaAgente semilla={id} canal={canal} tamano={72} estado="trabajando" />
+            </div>
+          ))}
+        </div>
+      </section>
     </>
   );
 }

@@ -72,7 +72,8 @@ export function rutaPlaneacion(cliente, aprobaciones) {
   const pendientes = {};
   for (const a of aprobaciones) {
     if (a.cliente === cliente.id && a.tipo === 'artefacto' && esPendiente(a)) {
-      const id = nombreEnBandeja[a.contenido?.artefacto];
+      // Los agentes reales usan el nombre exacto del artefacto de la ruta (ej. 'Matriz OGSM · SEO')
+      const id = nombreEnBandeja[a.contenido?.artefacto] ?? artefactos.find((x) => x.nombre === a.contenido?.artefacto)?.id;
       if (id) pendientes[id] = a.id;
     }
   }

@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Check, ExternalLink, LifeBuoy, MessageSquareMore, ShieldAlert, UserCheck } from 'lucide-react';
+import { ArrowLeft, Check, ExternalLink, LifeBuoy, Loader, MessageSquare, MessageSquareMore, ShieldAlert, UserCheck } from 'lucide-react';
+import { Markdown } from '../../components/Markdown.jsx';
+import { FormaAgente } from '../../components/FormaAgente.jsx';
+import '../../styles/agentes-reales.css';
 import { useSesion } from '../../context/SesionContext.jsx';
 import { HOY, esPendiente, useDatos } from '../../context/DatosContext.jsx';
 import { clientes as clientesEstaticos } from '../../data/clientes.js';
@@ -125,6 +128,11 @@ export function Detalle() {
               {item.estado === 'Aprobado' && 'Aprobado. El agente ya puede ejecutarlo.'}
               {item.estado === 'Activo en GHL' && 'Aprobado y activo en la subcuenta GHL del cliente (simulado).'}
               {item.estado === 'En curso por agente' && 'Pediste cambios. El agente está ajustando la propuesta y volverá a enviarla a la bandeja.'}
+              {item.estado === 'En curso por agente' && datos.motor.trabajando.includes(item.id) && (
+                <span style={{ marginLeft: 6 }}>
+                  <Loader size={12} className="girando" /> {item.agenteReal} está trabajando en ello…
+                </span>
+              )}
               {item.estado === 'Escalado' && (
                 <>
                   Esperando especialista · {escalado?.especialista ? escalado.especialista : 'Sin asignar'} ·{' '}
@@ -144,6 +152,11 @@ export function Detalle() {
               <InsigniaAgente agente={nombreAgente(item.agente)} />
               <ChipConfianza confianza={item.confianza} />
             </div>
+            {item.agenteReal && (
+              <div className="agente-real" style={{ marginBottom: 8 }}>
+                <FormaAgente semilla={item.agentId ?? item.agenteReal} canal={item.agente} tamano={20} /> Elaborado por el agente real {item.agenteReal}
+              </div>
+            )}
             <h4 style={{ marginBottom: 6 }}>Por qué lo propongo</h4>
             <p className="por-que">{item.porQue}</p>
             {item.confianza === 'Baja' && (
@@ -192,7 +205,10 @@ export function Detalle() {
               <dt>Tipo</dt>
               <dd>{nombreTipo[item.tipo]}</dd>
               <dt>Agente</dt>
-              <dd>{nombreAgente(item.agente)}</dd>
+              <dd>
+                {nombreAgente(item.agente)}
+                {item.agenteReal && <div className="texto-xs atenuado">{item.agenteReal}</div>}
+              </dd>
               <dt>Enviado</dt>
               <dd>
                 {formatoFecha(item.creado)}
@@ -221,6 +237,15 @@ export function Detalle() {
                 </>
               )}
             </dl>
+            {item.proyectoId && (
+              <Link
+                to={`/clientes/${cliente.id}/agentes/${item.agente}`}
+                className="boton boton--secundario"
+                style={{ marginTop: 12, width: '100%', justifyContent: 'center' }}
+              >
+                <MessageSquare size={14} /> Hablar con el agente
+              </Link>
+            )}
             {item.requiereVistoBuenoCliente && (
               <div className="chip-envolver" style={{ marginTop: 12 }}>
                 {item.aprobadoPorCliente ? (
@@ -308,6 +333,12 @@ function Contenido({ item }) {
           </div>
           {c.resumen && <p className="texto-sm atenuado" style={{ marginTop: 6 }}>{c.resumen}</p>}
         </div>
+        {c.documento && (
+          <div style={{ padding: '0 20px 18px' }}>
+            <Markdown>{c.documento}</Markdown>
+          </div>
+        )}
+        {c.columnas?.length > 0 && (
         <div className="tabla-envoltorio">
           <table className="tabla tabla--artefacto">
             <thead>
@@ -330,6 +361,7 @@ function Contenido({ item }) {
             </tbody>
           </table>
         </div>
+        )}
       </section>
     );
   }
@@ -395,6 +427,11 @@ function Contenido({ item }) {
             <li key={i}>{p}</li>
           ))}
         </ol>
+      )}
+      {c.documento && (
+        <div style={{ marginTop: 12 }}>
+          <Markdown>{c.documento}</Markdown>
+        </div>
       )}
     </section>
   );

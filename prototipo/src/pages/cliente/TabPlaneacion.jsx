@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CheckCircle2, CircleDashed, Clock, Lock, Loader } from 'lucide-react';
+import { CheckCircle2, CircleDashed, Clock, Lock, Loader, Sparkles } from 'lucide-react';
 import { etapas, listoParaEjecucion } from '../../lib/planeacion.js';
 import { Alerta, Chip } from '../../components/ui.jsx';
 
@@ -54,7 +54,7 @@ export function TabPlaneacion({ cliente, ruta, lectura }) {
                 {nombre}
               </div>
               {items.map((a) => (
-                <Artefacto key={a.id} artefacto={a} lectura={lectura} />
+                <Artefacto key={a.id} artefacto={a} lectura={lectura} cliente={cliente} />
               ))}
             </div>
           );
@@ -64,7 +64,11 @@ export function TabPlaneacion({ cliente, ruta, lectura }) {
   );
 }
 
-function Artefacto({ artefacto: a, lectura }) {
+// Agente real que elabora cada artefacto: el del canal, o el de estrategia para los transversales.
+const canalAgente = { SEO: 'SEO', SEM: 'SEM', Meta: 'Pauta', Redes: 'Redes', Transversal: 'Estrategia' };
+
+function Artefacto({ artefacto: a, lectura, cliente }) {
+  const generable = !lectura && a.autor !== 'Ejecutiva' && !cliente.onboarding && (a.estado === 'No iniciado' || a.estado === 'En curso por agente');
   const { clase, icono: Icono, color } = presentacion[a.estado];
   return (
     <div className={`artefacto artefacto--${clase}`}>
@@ -77,6 +81,15 @@ function Artefacto({ artefacto: a, lectura }) {
         <Icono size={13} strokeWidth={2.4} /> {a.estado === 'Bloqueado' ? 'Bloqueado' : a.estado}
       </span>
       {a.estado === 'Bloqueado' && <span style={{ color: 'var(--azul-800)', fontWeight: 600 }}>Requiere: {a.faltan.join(', ')}</span>}
+      {generable && (
+        <Link
+          to={`/clientes/${cliente.id}/agentes/${canalAgente[a.canal]}?pedir=${encodeURIComponent(a.nombre)}`}
+          className="boton boton--secundario"
+          style={{ padding: '6px 12px', fontSize: 12 }}
+        >
+          <Sparkles size={13} /> Generar con agente
+        </Link>
+      )}
       {a.aprobacionId && !lectura && (
         <Link to={`/aprobaciones/${a.aprobacionId}`} className="boton boton--primario" style={{ padding: '6px 12px', fontSize: 12 }}>
           Revisar y aprobar

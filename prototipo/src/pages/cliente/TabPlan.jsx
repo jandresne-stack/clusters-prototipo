@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { CalendarClock, CheckCircle2, Clock, ShieldAlert, Trash2, Undo2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { CalendarClock, CalendarRange, CheckCircle2, Clock, Compass, ShieldAlert, Trash2, Undo2 } from 'lucide-react';
 import { kpiNegocioPorId, servicioPorId } from '../../data/catalogos.js';
 import { HOY, esPendiente, useDatos } from '../../context/DatosContext.jsx';
 import { useSesion } from '../../context/SesionContext.jsx';
 import { formatoFecha, plural } from '../../lib/formato.js';
 import { Alerta, Chip, InsigniaAgente, Progreso } from '../../components/ui.jsx';
+import { FormaAgente } from '../../components/FormaAgente.jsx';
 
 // Canal del especialista que revisa cada servicio (Pauta social y Redes caen en Meta).
 const canalEspecialista = { SEO: 'SEO', SEM: 'SEM', Pauta: 'Meta', Redes: 'Meta' };
@@ -18,14 +20,41 @@ export function TabPlan({ cliente, ruta, listo, lectura }) {
   if (!listo) {
     const faltan = ruta.filter((a) => a.estado !== 'Aprobado').map((a) => a.nombre);
     return (
-      <Alerta tipo="info">
-        El plan mensual se habilita cuando toda la planeación esté aprobada. Falta: {faltan.join(', ')}.
-      </Alerta>
+      <>
+        <Alerta tipo="info">
+          El plan mensual se habilita cuando toda la planeación esté aprobada. Falta: {faltan.join(', ')}.
+        </Alerta>
+        {!lectura && !cliente.onboarding && (
+          <Link to={`/clientes/${cliente.id}/agentes/CMO?pedir=planeacion`} className="boton boton--secundario" style={{ marginTop: 12 }}>
+            <Compass size={16} /> Preguntarle al CMO cómo cerrar la planeación
+          </Link>
+        )}
+      </>
     );
   }
   if (pendiente) return <PlanPorAprobar plan={pendiente} cliente={cliente} lectura={lectura} />;
-  if (aprobado) return <PlanAprobado plan={aprobado} />;
-  return <PlanAnterior cliente={cliente} />;
+  return (
+    <>
+      {!lectura && <PedirAlCMO cliente={cliente} hayPlan={Boolean(aprobado)} />}
+      {aprobado ? <PlanAprobado plan={aprobado} /> : <PlanAnterior cliente={cliente} />}
+    </>
+  );
+}
+
+/** El CMO real arma el plan del mes siguiente a partir de los documentos base y el estado del cliente. */
+function PedirAlCMO({ cliente, hayPlan }) {
+  return (
+    <div className="tarjeta tarjeta-cmo" style={{ marginBottom: 16 }}>
+      <FormaAgente semilla="amd--cmo" canal="CMO" tamano={40} titulo="CMO del cliente" />
+      <div style={{ flex: 1 }}>
+        <strong style={{ color: 'var(--azul-900)' }}>{hayPlan ? '¿Listo para el próximo mes?' : 'Este cliente aún no tiene plan mensual'}</strong>
+        <p className="texto-sm atenuado">El CMO propone el plan de todo el equipo; tú quitas o pospones tareas antes de aprobarlo.</p>
+      </div>
+      <Link to={`/clientes/${cliente.id}/agentes/CMO?pedir=plan`} className="boton boton--primario">
+        <CalendarRange size={16} /> Pedir plan al CMO
+      </Link>
+    </div>
+  );
 }
 
 /** US-8: la ejecutiva puede quitar o posponer tareas y aprobar el resto. */
@@ -92,7 +121,7 @@ function PlanPorAprobar({ plan, cliente, lectura }) {
             </Chip>
           </div>
           <div className="fila">
-            <InsigniaAgente agente="los agentes" />
+            <InsigniaAgente agente={plan.agenteReal ? `el CMO (${plan.agenteReal})` : 'los agentes'} />
             <Chip variante={{ Alta: 'verde', Media: 'amarillo', Baja: 'rojo' }[plan.confianza]}>Confianza {plan.confianza.toLowerCase()}</Chip>
           </div>
         </div>
